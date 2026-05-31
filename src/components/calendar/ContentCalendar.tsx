@@ -40,6 +40,7 @@ export function ContentCalendar() {
       if (!r.ok) throw new Error(j?.error || "Failed");
       return (j?.posts as Post[] ?? []).filter((p) => p.scheduledAt || p.publishedAt);
     },
+    refetchInterval: 30_000,
   });
 
   const events = (scheduledQ.data ?? []).map((p) => {

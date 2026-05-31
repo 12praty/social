@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { authedRoute, bad, ok } from "@/lib/api-helpers";
+import { processDuePosts } from "@/lib/scheduler";
 
 import { platformLimit } from "@/lib/utils";
 
@@ -18,6 +19,13 @@ const VALID_PLATFORMS = ["LINKEDIN", "TWITTER", "INSTAGRAM"] as const;
 
 export async function GET(req: NextRequest) {
   return authedRoute(req, async (user, r) => {
+    // Opportunistically process any overdue scheduled posts before returning
+    // the list. This ensures status updates even without a persistent worker.
+    try {
+      await processDuePosts();
+    } catch (e) {
+      console.error("[posts/GET] opportunistic processDuePosts failed", e);
+    }
     const { searchParams } = new URL(r.url);
     const status = searchParams.get("status");
     const platform = searchParams.get("platform");

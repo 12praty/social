@@ -49,6 +49,7 @@ export default function PostsPage() {
       if (!r.ok) throw new Error(body?.error || "Failed to load");
       return (body?.posts ?? []) as Post[];
     },
+    refetchInterval: 30_000, // Auto-refresh every 30s to pick up status changes
   });
 
   const del = useMutation({
