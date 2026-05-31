@@ -69,6 +69,6 @@
     "typescript": "5.9.3"
   },
   "optionalDependencies": {
-    "@next/swc-darwin-x64": "15.2.4"
+    "@next/swc-darwin-x64": "15.5.18"
   }
 }
