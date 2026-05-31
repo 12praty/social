@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "interface-design": {
+      "source": "Dammyjay93/interface-design",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/interface-design/SKILL.md",
+      "computedHash": "d004c5e5e2e7132e1d64e9c2a339db7f7aaa69053a5c19cddc210dd35dd6fff5"
+    },
+    "ux-improve": {
+      "source": "101xanshu/ux-improve",
+      "sourceType": "github",
+      "skillPath": "skills/ux-improve/SKILL.md",
+      "computedHash": "b6b56019ef210ca921e170bfac8f2d28a35f624064933ed1810f6551420ffcdf"
+    }
+  }
+}

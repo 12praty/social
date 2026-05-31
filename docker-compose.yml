@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: social_studio_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: social_studio
+    ports:
+      - "5433:5432"
+    volumes:
+      - social_studio_pgdata:/var/lib/postgresql/data
+
+volumes:
+  social_studio_pgdata:
+

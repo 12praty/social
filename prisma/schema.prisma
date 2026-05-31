@@ -1,0 +1,81 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "darwin-arm64"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String      @unique
+  name       String?
+  password   String
+  provider   String      @default("email")
+  createdAt  DateTime    @default(now())
+  brandVoice BrandVoice?
+  posts      Post[]
+}
+
+model BrandVoice {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName   String   @default("")
+  industry       String   @default("")
+  targetAudience String   @default("")
+  toneKeywords   String[] @default([])
+  examplePost    String?
+  avoidWords     String[] @default([])
+  updatedAt      DateTime @updatedAt
+  createdAt      DateTime @default(now())
+}
+
+enum Platform {
+  LINKEDIN
+  TWITTER
+  INSTAGRAM
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+}
+
+model Post {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic        String
+  platform     Platform
+  content      String
+  imagePrompts String[]      @default([])
+  tone         String        @default("professional")
+  status       PostStatus    @default(DRAFT)
+  scheduledAt  DateTime?
+  publishedAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  scheduledJob ScheduledJob?
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}
+
+model ScheduledJob {
+  id          String    @id @default(cuid())
+  postId      String    @unique
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  scheduledAt DateTime
+  attempts    Int       @default(0)
+  lastError   String?
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([scheduledAt, processedAt])
+}
