@@ -2,8 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: { remotePatterns: [{ protocol: "https", hostname: "*.googleusercontent.com" }] },
-  experimental: {},
-  serverExternalPackages: ["@prisma/client", "bcryptjs"],
+  experimental: {
+    instrumentationHook: true,
+  },
+  serverExternalPackages: ["@prisma/client", "bcryptjs", "nodemailer"],
   webpack: (config) => {
     // macOS can hit EMFILE (too many open files) with large dependency graphs.
     // Polling trades CPU for reliability; enable via WATCHPACK_POLLING=true.
